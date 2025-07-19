@@ -1,9 +1,6 @@
 package containersResolver
 
 import (
-	"os"
-	"path/filepath"
-
 	"github.com/Checkmarx/containers-images-extractor/pkg/imagesExtractor"
 	"github.com/Checkmarx/containers-syft-packages-extractor/pkg/syftPackagesExtractor"
 	"github.com/Checkmarx/containers-types/types"
@@ -34,9 +31,9 @@ func (cr *ContainersResolver) Resolve(scanPath string, resolutionFolderPath stri
 	log.Debug().Msgf("Resolve func parameters: scanPath=%s, resolutionFolderPath=%s, images=%s, isDebug=%t", scanPath, resolutionFolderPath, images, isDebug)
 
 	// 0. validate input and create .checkmarx folder
-	checkmarxPath, err := validate(resolutionFolderPath)
+	err := validate(resolutionFolderPath)
 	if err != nil {
-		log.Err(err).Msg("Resolution Path is not valid or could not create .checkmarx folder.")
+		log.Err(err).Msg("Resolution Path is not valid")
 		return err
 	}
 
@@ -69,7 +66,7 @@ func (cr *ContainersResolver) Resolve(scanPath string, resolutionFolderPath stri
 		return err
 	}
 	//6. cleanup files generated folder
-	err = cleanup(resolutionFolderPath, outputPath, checkmarxPath)
+	err = cleanup(resolutionFolderPath, outputPath)
 	if err != nil {
 		log.Err(err).Msg("Could not cleanup resources.")
 		return err
@@ -77,23 +74,16 @@ func (cr *ContainersResolver) Resolve(scanPath string, resolutionFolderPath stri
 	return nil
 }
 
-func validate(resolutionFolderPath string) (string, error) {
+func validate(resolutionFolderPath string) error {
 	isValidFolderPath, err := imagesExtractor.IsValidFolderPath(resolutionFolderPath)
 	if err != nil || isValidFolderPath == false {
-		return "", err
+		return err
 	}
 
-	checkmarxPath := filepath.Join(resolutionFolderPath, ".checkmarx", "containers")
-
-	err = os.MkdirAll(checkmarxPath, 0755)
-	if err != nil {
-		return "", err
-	}
-
-	return checkmarxPath, nil
+	return nil
 }
 
-func cleanup(originalPath string, outputPath string, checkmarxPath string) error {
+func cleanup(originalPath string, outputPath string) error {
 	log.Info().Msgf("outputPath: %s", outputPath)
 	log.Info().Msgf("originalPath: %s", originalPath)
 	if outputPath != "" && outputPath != originalPath {
