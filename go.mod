@@ -1,4 +1,4 @@
-module github.com/Checkmarx/containers-resolver
+module github.com/cx-anjali-deore/containers-resolver
 
 go 1.24.1
 
