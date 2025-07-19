@@ -63,7 +63,7 @@ func (cr *ContainersResolver) Resolve(scanPath string, resolutionFolderPath stri
 	}
 
 	//5. save to resolution file path (now using .checkmarx folder)
-	err = cr.SaveObjectToFile(checkmarxPath, resolutionResult)
+	err = cr.SaveObjectToFile(resolutionFolderPath, resolutionResult)
 	if err != nil {
 		log.Err(err).Msg("Could not save resolution result.")
 		return err
@@ -94,20 +94,17 @@ func validate(resolutionFolderPath string) (string, error) {
 }
 
 func cleanup(originalPath string, outputPath string, checkmarxPath string) error {
-	log.Info().Msgf("checkmarxPath: %s", checkmarxPath)
 	log.Info().Msgf("outputPath: %s", outputPath)
 	log.Info().Msgf("originalPath: %s", originalPath)
-	if outputPath != "" && outputPath != originalPath && checkmarxPath != "" {
+	if outputPath != "" && outputPath != originalPath {
 		log.Info().Msgf("i am in delete directory")
 		err := imagesExtractor.DeleteDirectory(outputPath)
-		cxErr := imagesExtractor.DeleteDirectory(checkmarxPath)
+		//cxErr := imagesExtractor.DeleteDirectory(checkmarxPath)
 
 		if err != nil {
 			return err
 		}
-		if cxErr != nil {
-			return cxErr
-		}
+
 	}
 	return nil
 }
