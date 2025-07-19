@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	containersResolver "github.com/Checkmarx/containers-resolver/pkg/containerResolver"
 	"github.com/Checkmarx/containers-syft-packages-extractor/pkg/syftPackagesExtractor"
 	"github.com/Checkmarx/containers-types/types"
+	containersResolver "github.com/cx-anjali-deore/containers-resolver/pkg/containerResolver"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
